@@ -1,13 +1,15 @@
 package ru.yandex.practicum.collector.config;
 
 import org.apache.avro.specific.SpecificRecordBase;
+import ru.practicum.kafka.serializer.AvroSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.practicum.kafka.serializer.AvroSerializer;
+
+
 
 
 
