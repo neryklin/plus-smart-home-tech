@@ -46,7 +46,7 @@ public class CollectorService {
         HubEventAvro message = mapperHub.toHubEventAvro(hubEvent);
         ProducerRecord<String, SpecificRecordBase> record = new ProducerRecord<>(
                 hubsEventsTopic,
-                 null,
+                null,
                 hubEvent.getTimestamp().toEpochMilli(),
                 hubEvent.getHubId(),
                 message);
