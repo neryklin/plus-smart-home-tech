@@ -31,6 +31,8 @@ public class CollectorService {
         SensorEventAvro message = mapperSensor.toSensorEventAvro(sensorEvent);
         ProducerRecord<String, SpecificRecordBase> record = new ProducerRecord<>(
                 sensorsEventsTopic,
+                null,
+                sensorEvent.getTimestamp().toEpochMilli(),
                 sensorEvent.getId(),
                 message);
         log.info("конец обработка события " + sensorEvent.getType());
@@ -44,6 +46,8 @@ public class CollectorService {
         HubEventAvro message = mapperHub.toHubEventAvro(hubEvent);
         ProducerRecord<String, SpecificRecordBase> record = new ProducerRecord<>(
                 hubsEventsTopic,
+                 null,
+                hubEvent.getTimestamp().toEpochMilli(),
                 hubEvent.getHubId(),
                 message);
         log.info("конец обработка хаба " + hubEvent.getType());
