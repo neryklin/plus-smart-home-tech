@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.practicum.kafka.serializer.AvroSerializer;
 
+
+
 import java.util.HashMap;
 import java.util.Map;
 
