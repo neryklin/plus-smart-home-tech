@@ -3,15 +3,18 @@ package ru.yandex.practicum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
+import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
-import ru.yandex.practicum.service.AggregatorService;
+import ru.yandex.practicum.service.AggregatorSensorSnapshotService;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -23,15 +26,28 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AggregationStarter {
+    private static final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
+    private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
     private final Consumer<String, SensorEventAvro> consumer;
     private final Producer<String, SpecificRecordBase> producer;
-    private final AggregatorService aggregatorService;
-
-    private static final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
+    private final AggregatorSensorSnapshotService aggregatorService;
     @Value("${collector.kafka.topics.sensor-events}")
     private String topic;
 
-    private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
+    private static void manageOffsets(ConsumerRecord<String, SensorEventAvro> record, int count, Consumer<String, SensorEventAvro> consumer) {
+        currentOffsets.put(
+                new TopicPartition(record.topic(), record.partition()),
+                new OffsetAndMetadata(record.offset() + 1)
+        );
+
+        if (count % 10 == 0) {
+            consumer.commitAsync(currentOffsets, (offsets, exception) -> {
+                if (exception != null) {
+                    log.warn("Ошибка во время фиксации оффсетов: {}", offsets, exception);
+                }
+            });
+        }
+    }
 
     public void start() {
         Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
@@ -67,20 +83,5 @@ public class AggregationStarter {
     private void handleRecord(ConsumerRecord<String, SensorEventAvro> consumerRecord) throws InterruptedException {
         Optional<SensorsSnapshotAvro> snapshotAvro = aggregatorService.updateState(consumerRecord.value());
         snapshotAvro.ifPresent(snapshot -> aggregatorService.sendSnapshot(producer, snapshot));
-    }
-
-    private static void manageOffsets(ConsumerRecord<String, SensorEventAvro> record, int count, Consumer<String, SensorEventAvro> consumer) {
-        currentOffsets.put(
-                new TopicPartition(record.topic(), record.partition()),
-                new OffsetAndMetadata(record.offset() + 1)
-        );
-
-        if(count % 10 == 0) {
-            consumer.commitAsync(currentOffsets, (offsets, exception) -> {
-                if(exception != null) {
-                    log.warn("Ошибка во время фиксации оффсетов: {}", offsets, exception);
-                }
-            });
-        }
     }
 }

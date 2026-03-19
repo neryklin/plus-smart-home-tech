@@ -24,7 +24,7 @@ public class BaseAvroDeserializer<T extends SpecificRecordBase> implements Deser
     }
 
     @Override
-    public T deserialize(String topic, byte[] data)  {
+    public T deserialize(String topic, byte[] data) {
         try {
             if (data != null) {
                 BinaryDecoder decoder = decoderFactory.binaryDecoder(data, null);
