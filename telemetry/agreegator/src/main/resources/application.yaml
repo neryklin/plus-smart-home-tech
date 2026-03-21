@@ -1,21 +1,19 @@
-server:
-  port: 8081
 
-collector:
-  kafka:
-    properties:
-      bootstrap-servers": localhost:9092
-    consumer:
-      properties:
-        "group-id": aggregator
-    topics:
-      sensor-events: telemetry.sensors.v1
-      hub-events: telemetry.hubs.v1
-      snapshot-events: telemetry.snapshots.v1
+spring:
+  application:
+    name: aggregator
+  config:
+    import: configserver:http://localhost:8888
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        useRandomPolicy: true
+        max-interval: 6000
 
-      eureka:
-        instance:
-          hostname: localhost
-        client:
-          serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
+eureka:
+          instance:
+            hostname: localhost
+          client:
+            serviceUrl:
+              defaultZone: http://localhost:8761/eureka/
