@@ -12,6 +12,7 @@ import ru.yandex.practicum.repository.ConditionRepository;
 import ru.yandex.practicum.repository.ScenarioRepository;
 import ru.yandex.practicum.service.HubRouterProcessor;
 
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -27,13 +28,16 @@ public class SnapshotHandler {
         actionRepository.findAllByScenario(scenario).forEach(hubRouterClient::executeAction);
     }
 
+
+
     public void handleSnapshot(SensorsSnapshotAvro snapshot) {
         Map<String, SensorStateAvro> sensorState = snapshot.getSensorsState();
-        scenarioRepository.findByHubId(snapshot.getHubId()).stream()
+        List<Scenario> scenarioList =scenarioRepository.findByHubId(snapshot.getHubId());
+        List<Scenario> validScenarios = scenarioList.stream()
                 .filter(scenario -> checkScenario(scenario, sensorState))
-                .forEach(scenario -> {
-                    sendAction(scenario);
-                });
+                .toList();
+        scenarioList.forEach(scenario -> sendAction(scenario));
+
     }
 
     private Boolean checkValue(Condition condition, int currentValue, int conditionValue) {
