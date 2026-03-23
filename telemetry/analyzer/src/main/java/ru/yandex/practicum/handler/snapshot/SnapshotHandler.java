@@ -29,10 +29,9 @@ public class SnapshotHandler {
     }
 
 
-
     public void handleSnapshot(SensorsSnapshotAvro snapshot) {
         Map<String, SensorStateAvro> sensorState = snapshot.getSensorsState();
-        List<Scenario> scenarioList =scenarioRepository.findByHubId(snapshot.getHubId());
+        List<Scenario> scenarioList = scenarioRepository.findByHubId(snapshot.getHubId());
         List<Scenario> validScenarios = scenarioList.stream()
                 .filter(scenario -> checkScenario(scenario, sensorState))
                 .toList();

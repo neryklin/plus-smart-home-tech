@@ -17,9 +17,9 @@ import ru.yandex.practicum.model.mapper.Mapper;
 public class HubRouterProcessor {
 
 
+    final Mapper mapper;
     @GrpcClient("hub-router")
     private HubRouterControllerGrpc.HubRouterControllerBlockingStub hubRouterClient;
-    final Mapper mapper;
 
     public void executeAction(Action action) {
         DeviceActionRequest request = mapper.MapToActionRequest(action);

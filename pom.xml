@@ -19,7 +19,7 @@
         <module>telemetry</module>
         <module>infra</module>
         <module>commerce</module>
-        <module>infra/ConfigServer</module>
+        <!--        <module>infra/config-server</module>-->
     </modules>
 
     <properties>
@@ -39,6 +39,7 @@
         <avro-maven-plugin.version>${avro.version}</avro-maven-plugin.version>
         <protobuf-plugin.version>2.4.0</protobuf-plugin.version>
         <spring-cloud-dependencies.version>2023.0.3</spring-cloud-dependencies.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -48,7 +49,17 @@
                 <artifactId>avro</artifactId>
                 <version>${avro.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.kafka</groupId>
                 <artifactId>kafka-clients</artifactId>
