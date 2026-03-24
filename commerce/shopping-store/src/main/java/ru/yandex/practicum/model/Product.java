@@ -23,21 +23,21 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID productId;
 
-    @Column(name = "name", nullable = false)
+    @Column
     private String productName;
 
-    @Column(nullable = false)
+    @Column
     private String description;
 
     @Column
     private String imageSrc;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "quantity_state", nullable = false)
+    @Column(name = "quantity_state")
     private QuantityState quantityState;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "product_state", nullable = false)
+    @Column(name = "product_state")
     private ProductState productState;
 
     @Enumerated(EnumType.STRING)
