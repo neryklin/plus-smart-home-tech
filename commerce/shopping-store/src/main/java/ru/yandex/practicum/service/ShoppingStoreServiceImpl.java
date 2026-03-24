@@ -36,8 +36,9 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
     @Override
     @Transactional
     public ProductDto create(ProductDto productDto) {
-        log.info("создан Товар : {}", productDto);
-        return productMapper.mapToProductDto(shoppingStoreRepository.save(productMapper.mapToProduct(productDto)));
+        Product product = shoppingStoreRepository.save(productMapper.ToProduct(productDto));
+        log.info("создан Товар : {}", product);
+        return productMapper.ToProductDto(product);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
     public ProductDto update(ProductDto productDto) {
         findProduct(productDto.getProductId());
         log.info("обновлен Товар : {}", productDto);
-        return productMapper.mapToProductDto(shoppingStoreRepository.save(productMapper.mapToProduct(productDto)));
+        return productMapper.ToProductDto(shoppingStoreRepository.save(productMapper.ToProduct(productDto)));
     }
 
     @Override
@@ -71,13 +72,13 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
     @Transactional(readOnly = true)
     public Page<ProductDto> get(ProductCategory category, Pageable pageable) {
         Page<Product> productsPage = shoppingStoreRepository.findAllByProductCategory(category, pageable);
-        return productsPage.map(productMapper::mapToProductDto);
+        return productsPage.map(productMapper::ToProductDto);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ProductDto getProductById(UUID productId) {
-        return productMapper.mapToProductDto(findProduct(productId));
+        return productMapper.ToProductDto(findProduct(productId));
     }
 
 

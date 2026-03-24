@@ -11,6 +11,7 @@ import ru.yandex.practicum.dto.ShoppingCartDto;
 import ru.yandex.practicum.feings.ShoppingCartFeignClient;
 import ru.yandex.practicum.service.ShoppingCartService;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,7 +42,7 @@ public class ShoppingCartController implements ShoppingCartFeignClient {
     }
 
     @PostMapping("/remove")
-    public ShoppingCartDto removeProducts(@RequestParam String username, @RequestBody Map<UUID, Long> products) {
+    public ShoppingCartDto removeProducts(@RequestParam String username, @RequestBody List<UUID> products) {
         log.info("[POST] Удаление товаров: {} в корзине  {}", products, username);
         return shoppingCartService.removeProducts(username, products);
     }

@@ -9,6 +9,7 @@ import ru.yandex.practicum.dto.ProductDto;
 import ru.yandex.practicum.dto.SetQuantityStateRequest;
 import ru.yandex.practicum.enums.ProductCategory;
 import ru.yandex.practicum.feings.ShoppingStoreFeignClient;
+import ru.yandex.practicum.model.Product;
 import ru.yandex.practicum.service.ShoppingStoreService;
 
 import java.util.UUID;
@@ -24,7 +25,9 @@ public class ShoppingStoreController implements ShoppingStoreFeignClient {
     @PutMapping
     public ProductDto create(@RequestBody ProductDto productDto) {
         log.info("[PUT] новый товара: {}", productDto);
-        return shoppingStoreService.create(productDto);
+        ProductDto pr = shoppingStoreService.create(productDto);
+        log.info("[PUT] новый товара: {}", pr);
+        return pr;
     }
 
     @PostMapping("/removeProductFromStore")

@@ -8,6 +8,7 @@ import ru.yandex.practicum.dto.BookedProductsDto;
 import ru.yandex.practicum.dto.ChangeProductQuantityRequest;
 import ru.yandex.practicum.dto.ShoppingCartDto;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public interface ShoppingCartFeignClient {
     void deactivate(@RequestParam String username);
 
     @PostMapping("/remove")
-    ShoppingCartDto removeProducts(@RequestParam String username, @RequestBody Map<UUID, Long> products);
+    ShoppingCartDto removeProducts(@RequestParam String username, @RequestBody List<UUID> products);
 
     @PostMapping("/change-quantity")
     ShoppingCartDto changeQuantity(@RequestParam String username, @RequestBody ChangeProductQuantityRequest request);

@@ -16,6 +16,7 @@ import ru.yandex.practicum.model.ShoppingCart;
 import ru.yandex.practicum.repository.ShoppingCartRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -56,10 +57,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional
-    public ShoppingCartDto removeProducts(String username, Map<UUID, Long> products) {
+    public ShoppingCartDto removeProducts(String username, List<UUID> products) {
         ShoppingCart shoppingCart = getCart(username);
-        shoppingCart.setProducts(products);
-        return shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.save(shoppingCart));
+        products.forEach(shoppingCart.getProducts()::remove);
+        ShoppingCart removeShoppingCart = shoppingCartRepository.save(shoppingCart);
+        return shoppingCartMapper.toShoppingCartDto(removeShoppingCart);
     }
 
     @Override

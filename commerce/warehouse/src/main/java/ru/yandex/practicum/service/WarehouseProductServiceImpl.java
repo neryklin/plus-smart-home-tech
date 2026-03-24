@@ -31,8 +31,8 @@ public class WarehouseProductServiceImpl implements WarehouseProductService {
     @Transactional
     public void newProduct(NewProductInWarehouseRequest request) {
         Optional<WarehouseProduct> product = warehouseProductRepository.findById(request.getProductId());
-        if (product.isEmpty()) {
-            throw new DiferentException("Отсутствует данный товар " + request.getProductId());
+        if (product.isPresent()) {
+            throw new DiferentException(" данный товар уже есть" + request.getProductId());
         }
         WarehouseProduct warehouseProduct = warehouseProductRepository.save(warehouseProductMapper.mapToWarehouseProduct(request));
         log.info("создали товар: {}", warehouseProduct);
@@ -75,7 +75,7 @@ public class WarehouseProductServiceImpl implements WarehouseProductService {
     public void addQuantity(AddProductToWarehouseRequest request) {
 
         Optional<WarehouseProduct> product = warehouseProductRepository.findById(request.getProductId());
-        if (product.isPresent()) {
+        if (product.isEmpty()) {
             log.error("Товара нет на складе: {}", request.getProductId());
             throw new DiferentException("товара нет на складе");
         }
