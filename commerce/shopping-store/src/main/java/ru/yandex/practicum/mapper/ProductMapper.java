@@ -13,7 +13,6 @@ public interface ProductMapper {
 
     Product ToProduct(ProductDto productDto);
 
-
     default ProductDto toDto(Product product) {
             if (product == null) return null;
 

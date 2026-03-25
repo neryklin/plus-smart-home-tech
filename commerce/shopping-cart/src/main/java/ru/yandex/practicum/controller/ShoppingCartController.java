@@ -1,9 +1,9 @@
 package ru.yandex.practicum.controller;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.BookedProductsDto;
 import ru.yandex.practicum.dto.ChangeProductQuantityRequest;
@@ -18,12 +18,13 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/shopping-cart")
+@Validated
 @RequiredArgsConstructor
 public class ShoppingCartController implements ShoppingCartFeignClient {
     private final ShoppingCartService shoppingCartService;
 
     @GetMapping
-    public ShoppingCartDto getShoppingCart(@Valid @NotBlank @RequestParam String username) {
+    public ShoppingCartDto getShoppingCart(@NotBlank @RequestParam String username) {
         log.info("[GET] Получение корзины полтзователя {}", username);
         return shoppingCartService.getShoppingCart(username);
     }

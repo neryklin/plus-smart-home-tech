@@ -15,7 +15,7 @@ import java.util.UUID;
 @FeignClient(name = "shopping-cart", path = "/api/v1/shopping-cart")
 public interface ShoppingCartFeignClient {
     @GetMapping
-    ShoppingCartDto getShoppingCart(@Valid @NotBlank @RequestParam String username);
+    ShoppingCartDto getShoppingCart(@NotBlank @RequestParam String username);
 
     @PutMapping
     ShoppingCartDto addProduct(@RequestParam @NotBlank String username, @RequestBody Map<UUID, Long> products);

@@ -1,10 +1,7 @@
 package ru.yandex.practicum.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.yandex.practicum.enums.ShoppingCartState;
 
 import java.util.Map;
@@ -15,7 +12,8 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "carts")
-@Data
+@Getter
+@Setter
 public class ShoppingCart {
     @Id
     @Column(name = "cart_id", nullable = false)
