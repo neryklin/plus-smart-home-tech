@@ -48,3 +48,30 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+
+  store-db:
+    image: postgres:16.1
+    environment:
+      POSTGRES_DB: shopping_store
+      POSTGRES_USER: shopping_store
+      POSTGRES_PASSWORD: shopping_store
+    ports:
+      - "7432:5432"
+
+  cart-db:
+    image: postgres:16.1
+    environment:
+      POSTGRES_DB: shopping_cart
+      POSTGRES_USER: shopping_cart
+      POSTGRES_PASSWORD: shopping_cart
+    ports:
+      - "8432:5432"
+
+  warehouse-db:
+    image: postgres:16.1
+    environment:
+      POSTGRES_DB: warehouse
+      POSTGRES_USER: warehouse
+      POSTGRES_PASSWORD: warehouse
+    ports:
+      - "9432:5432"
