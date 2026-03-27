@@ -8,6 +8,7 @@ import ru.yandex.practicum.dto.ProductDto;
 import ru.yandex.practicum.dto.SetQuantityStateRequest;
 import ru.yandex.practicum.enums.ProductCategory;
 
+import java.util.List;
 import java.util.UUID;
 
 @FeignClient(name = "shopping-store", path = "/api/v1/shopping-store")
@@ -29,4 +30,7 @@ public interface ShoppingStoreFeignClient {
 
     @PostMapping("/quantityState")
     boolean setQuantity(SetQuantityStateRequest request);
+
+    @GetMapping("/by-ids")
+    List<ProductDto> getProductsByIds(@RequestBody List<UUID> uuids);
 }

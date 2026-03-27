@@ -2,8 +2,10 @@ package ru.yandex.practicum.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.yandex.practicum.enums.*;
-import java.math.BigDecimal;
+import ru.yandex.practicum.enums.ProductCategory;
+import ru.yandex.practicum.enums.ProductState;
+import ru.yandex.practicum.enums.QuantityState;
+
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -41,5 +43,5 @@ public class Product {
     private ProductCategory productCategory;
 
     @Column(precision = 19, scale = 4, nullable = false)
-    private BigDecimal price;
+    private Double price;
 }

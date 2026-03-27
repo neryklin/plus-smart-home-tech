@@ -40,7 +40,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCartDto addProduct(String username, Map<UUID, Long> products) {
         ShoppingCart shoppingCart = findUserCartorCreate(username);
 
-        warehouseProductFeignClient.checkAvailableProducts(new ShoppingCartDto(shoppingCart.getShoppingCartId(), products));
+        warehouseProductFeignClient.reserveProducts(new ShoppingCartDto(shoppingCart.getShoppingCartId(), products));
 
         shoppingCart.getProducts().putAll(products);
         ShoppingCart addShoppingCart = shoppingCartRepository.save(shoppingCart);
@@ -81,7 +81,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public BookedProductsDto reserveProducts(String nameUser) {
         ShoppingCart shoppingCart = findUserCartorCreate(nameUser);
-        return warehouseProductFeignClient.checkAvailableProducts(shoppingCartMapper.toShoppingCartDto(shoppingCart));
+        return warehouseProductFeignClient.reserveProducts(shoppingCartMapper.toShoppingCartDto(shoppingCart));
     }
 
     private ShoppingCart findUserCartorCreate(String username) {
