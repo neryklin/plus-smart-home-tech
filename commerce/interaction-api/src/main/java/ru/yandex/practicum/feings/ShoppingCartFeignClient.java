@@ -1,6 +1,5 @@
 package ru.yandex.practicum.feings;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;

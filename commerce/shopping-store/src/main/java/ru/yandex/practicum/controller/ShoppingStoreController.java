@@ -9,9 +9,9 @@ import ru.yandex.practicum.dto.ProductDto;
 import ru.yandex.practicum.dto.SetQuantityStateRequest;
 import ru.yandex.practicum.enums.ProductCategory;
 import ru.yandex.practicum.feings.ShoppingStoreFeignClient;
-import ru.yandex.practicum.model.Product;
 import ru.yandex.practicum.service.ShoppingStoreService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -59,5 +59,12 @@ public class ShoppingStoreController implements ShoppingStoreFeignClient {
     public ProductDto getProductById(@PathVariable UUID productId) {
         log.info("[GET] товар c id: {}", productId);
         return shoppingStoreService.getProductById(productId);
+    }
+
+    @GetMapping("/by-ids")
+    public List<ProductDto> getProductsByIds(@RequestBody List<UUID> uuids) {
+        log.info("[GET] Получение списка товаров по списку ids: {}", uuids);
+        //  return new ArrayList<>();
+        return shoppingStoreService.getProductsByIds(uuids);
     }
 }

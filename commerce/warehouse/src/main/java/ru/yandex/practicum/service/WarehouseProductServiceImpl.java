@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.*;
 import ru.yandex.practicum.exeption.DiferentException;
 import ru.yandex.practicum.mapper.WarehouseProductMapper;
+import ru.yandex.practicum.model.AssemblyProductsForOrderRequest;
+import ru.yandex.practicum.model.ShipperToDeliveryRequest;
 import ru.yandex.practicum.model.WarehouseProduct;
 import ru.yandex.practicum.repository.WarehouseProductRepository;
 
@@ -95,4 +97,21 @@ public class WarehouseProductServiceImpl implements WarehouseProductService {
                 .flat("1")
                 .build();
     }
+
+    @Override
+    public void shippedToDelivery(ShipperToDeliveryRequest request) {
+
+    }
+
+    @Override
+    public void returnProducts(Map<UUID, Long> products) {
+
+    }
+
+    @Override
+    public BookedProductsDto assemblyProductsForOrder(AssemblyProductsForOrderRequest request) {
+        return null;
+    }
+
+
 }

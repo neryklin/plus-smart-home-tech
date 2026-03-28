@@ -15,6 +15,7 @@ import ru.yandex.practicum.mapper.ProductMapper;
 import ru.yandex.practicum.model.Product;
 import ru.yandex.practicum.repository.ShoppingStoreRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -81,5 +82,11 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
         return productMapper.toDto(findProduct(productId));
     }
 
-
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDto> getProductsByIds(List<UUID> uuids) {
+        return shoppingStoreRepository.findAllByProductIdIn(uuids).stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
 }
