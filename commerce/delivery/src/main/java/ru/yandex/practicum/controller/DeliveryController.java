@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.DeliveryDto;
 import ru.yandex.practicum.dto.OrderDto;
@@ -17,11 +18,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/delivery")
 @RequiredArgsConstructor
+@Validated
 public class DeliveryController implements DeliveryFeignClient {
     private final DeliveryService deliveryService;
 
     @PutMapping
-    public DeliveryDto createNewDelivery(@RequestBody @Valid DeliveryDto deliveryDto) {
+    public DeliveryDto createNewDelivery(@RequestBody DeliveryDto deliveryDto) {
         log.info("[PUT] Новая доставка: {}", deliveryDto);
         return deliveryService.createNewDelivery(deliveryDto);
     }
@@ -45,7 +47,7 @@ public class DeliveryController implements DeliveryFeignClient {
     }
 
     @PostMapping("/cost")
-    public Double getCostDelivery(@RequestBody @Valid OrderDto orderDto) {
+    public Double getCostDelivery(@RequestBody OrderDto orderDto) {
         log.info("[POST] Расчёт стоимости доставки: {}", orderDto);
         return deliveryService.getCostDelivery(orderDto);
     }

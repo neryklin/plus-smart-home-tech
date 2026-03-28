@@ -1,6 +1,7 @@
 package ru.yandex.practicum.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.DeliveryDto;
@@ -19,6 +20,8 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class DeliveryServiceImpl implements DeliveryService {
     private final DeliveryRepository deliveryRepository;
     private final DeliveryMapper deliveryMapper;
@@ -27,7 +30,6 @@ public class DeliveryServiceImpl implements DeliveryService {
 
 
     @Override
-    @Transactional
     public DeliveryDto createNewDelivery(DeliveryDto deliveryDto) {
         Delivery delivery = deliveryMapper.toDelivery(deliveryDto);
         Delivery savedDelivery = deliveryRepository.save(delivery);
@@ -35,7 +37,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    @Transactional
     public void setDeliverySuccess(UUID deliveryId) {
         Delivery delivery = findDeliveryOrThrow(deliveryId);
         delivery.setState(DeliveryState.DELIVERED);
@@ -44,7 +45,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    @Transactional
     public void setDeliveryPicked(UUID deliveryId) {
         Delivery delivery = findDeliveryOrThrow(deliveryId);
         UUID orderId = delivery.getOrderId();
@@ -55,7 +55,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    @Transactional
     public void setDeliveryError(UUID deliveryId) {
         Delivery delivery = findDeliveryOrThrow(deliveryId);
         delivery.setState(DeliveryState.FAILED);
@@ -64,23 +63,29 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Double getCostDelivery(OrderDto orderDto) {
+        log.info("старт рассчет стоимость доставки  : {}", orderDto.getOrderId());
         Delivery delivery = findDeliveryOrThrow(orderDto.getDeliveryId());
         Address from = delivery.getFromAddress();
         Address to = delivery.getToAddress();
         double cost = 5;
         if (from.getStreet().contains("ADDRESS_2")) {
             cost += cost * 2;
+            log.debug(" отладочные сообщения from.getStreet().contains(ADDRESS_ : {}", cost);
         }
         if (orderDto.isFragile()) {
             cost += cost * 0.2;
+            log.debug(" отладочные сообщения forderDto.isFragile(): {}", cost);
         }
         cost += orderDto.getDeliveryWeight().doubleValue() * 0.3;
+        log.debug(" отладочные сообщения cost += orderDto.getDeliveryWeight().doubleValue() * 0.3: {}", cost);
         cost += orderDto.getDeliveryVolume().doubleValue() * 0.2;
+        log.debug(" отладочные сообщения cost += orderDto.getDeliveryVolume().doubleValue() * 0.2 : {}", cost);
         if (!from.getStreet().equalsIgnoreCase(to.getStreet())) {
             cost += cost * 0.2;
+            log.debug(" отладочные сообщения !from.getStreet().equalsIgnoreCase(to.getStreet()) : {}", cost);
         }
+        log.info("окончание рассчет стоимость доставки  : {}", orderDto.getOrderId());
         return Double.valueOf(cost);
     }
 

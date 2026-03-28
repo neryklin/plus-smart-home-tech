@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,17 +20,18 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/payment")
 @RequiredArgsConstructor
+@Validated
 public class PaymentController implements PaymentFeignClient {
     private final PaymentService paymentService;
 
     @PostMapping
-    public PaymentDto createPayment(@Valid @RequestBody OrderDto orderDto) {
+    public PaymentDto createPayment(@RequestBody OrderDto orderDto) {
         log.info("[POST]  для оплаты {}", orderDto);
         return paymentService.createPayment(orderDto);
     }
 
     @PostMapping("/totalCost")
-    public Double getTotalPayment(@Valid @RequestBody OrderDto orderDto) {
+    public Double getTotalPayment(@RequestBody OrderDto orderDto) {
         log.info("[POST] стоимомть заказа {}", orderDto);
         return paymentService.getTotalPayment(orderDto);
     }

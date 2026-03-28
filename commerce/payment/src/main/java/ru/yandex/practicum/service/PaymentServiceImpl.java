@@ -19,6 +19,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
@@ -26,7 +27,6 @@ public class PaymentServiceImpl implements PaymentService {
     private final OrderFeignClient orderFeignClient;
 
     @Override
-    @Transactional
     public PaymentDto createPayment(OrderDto orderDto) {
         Payment payment = Payment.builder()
                 .orderId(orderDto.getOrderId())
@@ -40,13 +40,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Double getTotalPayment(OrderDto orderDto) {
         return orderDto.getProductPrice() + orderDto.getTotalPrice() * 0.1 + orderDto.getDeliveryVolume();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Double getProductPayment(OrderDto orderDto) {
         Map<UUID, Long> products = orderDto.getProducts();
         if (products == null)
@@ -61,7 +59,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Transactional
     public void refundPayment(UUID paymentId) {
         Payment payment = getPayment(paymentId);
         payment.setState(PaymentState.SUCCESS);
@@ -70,7 +67,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Transactional
     public void PaymentError(UUID paymentId) {
         Payment payment = getPayment(paymentId);
         payment.setState(PaymentState.FAILED);

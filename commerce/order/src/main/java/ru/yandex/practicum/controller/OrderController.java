@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.CreateNewOrderRequest;
 import ru.yandex.practicum.dto.OrderDto;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/order")
 @RequiredArgsConstructor
+@Validated
 public class OrderController implements OrderFeignClient {
     private final OrderService orderService;
 
@@ -65,13 +67,13 @@ public class OrderController implements OrderFeignClient {
     }
 
     @PutMapping
-    public OrderDto createNewOrder(@Valid @RequestBody CreateNewOrderRequest request) {
+    public OrderDto createNewOrder(@RequestBody CreateNewOrderRequest request) {
         log.info("[PUT] новый заказ {} ", request);
         return orderService.createNewOrder(request);
     }
 
     @PostMapping("/return")
-    public OrderDto returnOrder(@Valid @RequestBody ProductReturnRequest returnRequest) {
+    public OrderDto returnOrder(@RequestBody ProductReturnRequest returnRequest) {
         log.info("[POST] Возврат заказа {} ", returnRequest);
         return orderService.returnOrder(returnRequest);
     }

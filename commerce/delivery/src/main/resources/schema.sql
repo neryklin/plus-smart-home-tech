@@ -3,11 +3,11 @@ DROP TABLE IF EXISTS address;
 
 CREATE TABLE IF NOT EXISTS address (
     address_id UUID PRIMARY KEY,
-    country VARCHAR,
-    city VARCHAR,
-    street VARCHAR,
-    house VARCHAR,
-    flat VARCHAR
+    country VARCHAR(30),
+    city VARCHAR(30),
+    street VARCHAR(30),
+    house VARCHAR(30),
+    flat VARCHAR(30)
 );
 
 CREATE TABLE IF NOT EXISTS deliveries (
